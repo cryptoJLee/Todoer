@@ -2,10 +2,16 @@ use actix_web::http::header::ContentType;
 use actix_web::{Responder, HttpResponse, HttpRequest};
 use actix_web::body::BoxBody;
 use serde::Serialize;
-use crate::state::read_file;
+
 use crate::to_do::{ItemTypes, to_do_factory};
 use crate::to_do::enums::TaskStatus;
 use crate::to_do::structs::base::Base;
+
+use crate::diesel;
+use diesel::prelude::*;
+use crate::database::establish_connection;
+use crate::models::item::item::Item;
+use crate::schema::to_do;
 
 #[derive(Serialize)]
 pub struct TodoItems {
@@ -39,14 +45,15 @@ impl TodoItems {
   }
 
   pub fn get_state() -> TodoItems {
-    let state = read_file("./state.json");
+    let connection = establish_connection();
     let mut array_buffer = Vec::new();
 
-    for (key, value) in state {
-      let status = TaskStatus::from_string(
-        value.as_str().unwrap().to_string()
-      );
-      let item = to_do_factory(&key, status);
+    let items = to_do::table
+        .order(to_do::columns::id.asc())
+        .load::<Item>(&connection).unwrap();
+    for item in items {
+      let status = TaskStatus::from_string((&item.status.as_str()).to_string());
+      let item = to_do_factory(&item.title, status);
       array_buffer.push(item);
     }
     TodoItems::new(array_buffer)

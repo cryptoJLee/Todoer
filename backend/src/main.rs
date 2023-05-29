@@ -8,8 +8,6 @@ use actix_service::Service;
 mod jwt;
 mod views;
 mod to_do;
-mod state;
-mod processes;
 mod schema;
 mod database;
 mod models;

@@ -27,7 +27,7 @@
     "react-eject": "react-scripts eject",
     "electron-build": "electron-builder",
     "build": "npm run react-build && npm run electron-build",
-    "start": "concurrently -k \"cross-env BROWSER=none npm run react-start\" \"wait-on tcp:3000 && npx electron .\""
+    "start": "npm run react-start"
   },
   "eslintConfig": {
     "extends": [

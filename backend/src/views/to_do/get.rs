@@ -1,7 +1,8 @@
 use actix_web::Responder;
 
 use crate::json_serialization::to_do_items::TodoItems;
+use crate::jwt::JwToken;
 
-pub async fn get() -> impl Responder {
-  TodoItems::get_state()
+pub async fn get(token: JwToken) -> impl Responder {
+  TodoItems::get_state(token.user_id)
 }

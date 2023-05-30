@@ -44,11 +44,12 @@ impl TodoItems {
     }
   }
 
-  pub fn get_state() -> TodoItems {
+  pub fn get_state(user_id: i32) -> TodoItems {
     let connection = establish_connection();
     let mut array_buffer = Vec::new();
 
     let items = to_do::table
+        .filter(to_do::columns::user_id.eq(&user_id))
         .order(to_do::columns::id.asc())
         .load::<Item>(&connection).unwrap();
     for item in items {

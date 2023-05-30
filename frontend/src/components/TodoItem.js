@@ -2,7 +2,7 @@ import React, { useState } from "react";
 import axios from "axios";
 import "../App.css";
 
-function ToDoItem({title, status, passBackResponse}) {
+function ToDoItem({title, status, passBackResponse, logout}) {
   const processStatus = status => status === "PENDING" ? "edit" : "delete";
   const button = processStatus(status);
   const inverseStatus = status => status === "PENDING" ? "DONE" : "PENDING";
@@ -14,9 +14,12 @@ function ToDoItem({title, status, passBackResponse}) {
         status: inverseStatus(status)
       }, 
       {
-        headers: {"token": "some_token"}
+        headers: {"token": localStorage.getItem("user-token")}
       }
-    ).then(response => passBackResponse(response));
+    ).then(response => passBackResponse(response)
+    ).catch(error => {
+      if (error.response.status === 401) logout();
+    });
   };
 
   return (

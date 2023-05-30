@@ -465,12 +465,6 @@ dependencies = [
 ]
 
 [[package]]
-name = "dotenv"
-version = "0.15.0"
-source = "registry+https://github.com/rust-lang/crates.io-index"
-checksum = "77c90badedccf4105eca100756a0b1289e191f6fcbdadd3cee1d2f614f97da8f"
-
-[[package]]
 name = "encoding_rs"
 version = "0.8.32"
 source = "registry+https://github.com/rust-lang/crates.io-index"
@@ -749,6 +743,12 @@ name = "libc"
 version = "0.2.144"
 source = "registry+https://github.com/rust-lang/crates.io-index"
 checksum = "2b00cc1c228a6782d0f076e7b232802e0c5689d41bb5df366f2a6b6621cfdfe1"
+
+[[package]]
+name = "linked-hash-map"
+version = "0.5.6"
+source = "registry+https://github.com/rust-lang/crates.io-index"
+checksum = "0717cef1bc8b636c6e1c1bbdefc09e6322da8a9321966e8928ef80d20f7f770f"
 
 [[package]]
 name = "local-channel"
@@ -1088,6 +1088,18 @@ dependencies = [
 ]
 
 [[package]]
+name = "serde_yaml"
+version = "0.8.26"
+source = "registry+https://github.com/rust-lang/crates.io-index"
+checksum = "578a7433b776b56a35785ed5ce9a7e777ac0598aac5a6dd1b4b18a307c7fc71b"
+dependencies = [
+ "indexmap",
+ "ryu",
+ "serde",
+ "yaml-rust",
+]
+
+[[package]]
 name = "sha1"
 version = "0.10.5"
 source = "registry+https://github.com/rust-lang/crates.io-index"
@@ -1216,10 +1228,10 @@ dependencies = [
  "actix-web",
  "chrono",
  "diesel",
- "dotenv",
  "futures",
  "serde",
  "serde_json",
+ "serde_yaml",
 ]
 
 [[package]]
@@ -1552,6 +1564,15 @@ name = "windows_x86_64_msvc"
 version = "0.48.0"
 source = "registry+https://github.com/rust-lang/crates.io-index"
 checksum = "1a515f5799fe4961cb532f983ce2b23082366b898e52ffbce459c86f67c8378a"
+
+[[package]]
+name = "yaml-rust"
+version = "0.4.5"
+source = "registry+https://github.com/rust-lang/crates.io-index"
+checksum = "56c1936c4cc7a1c9ab21a1ebb602eb942ba868cbd44a99cb7cdc5892335e1c85"
+dependencies = [
+ "linked-hash-map",
+]
 
 [[package]]
 name = "zstd"

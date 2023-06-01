@@ -14,6 +14,9 @@ function App() {
   const handleReturnedState = (response) => {
     let pendingItems = response.data["pending_items"];
     let doneItems = response.data["done_items"];
+    localStorage.setItem("item-cache-date", new Date());
+    localStorage.setItem("item-cache-data-pending", JSON.stringify(pendingItems));
+    localStorage.setItem("item-cache-data-done", JSON.stringify(doneItems));
     setPendingItems(processItemValues(pendingItems));
     setDoneItems(processItemValues(doneItems));
   }
@@ -36,18 +39,32 @@ function App() {
     setLoginStatus(false);
   }
   function getItems() {
-    console.log(localStorage.getItem("user-token"))
-    axios.get(
-      "http://127.0.0.1:8000/v1/item/get", 
-      {
-        headers: {"token": localStorage.getItem("user-token")}
-      }
-    ).then(response => {
-      setPendingItems(processItemValues(response.data["pending_items"]));
-      setDoneItems(processItemValues(response.data["done_items"]));
-    }).catch(error => {
-      if (error.response.status === 401) logout();
-    });
+    let cachedData = Date.parse(localStorage.getItem("item-cache-date"));
+    let now = new Date();
+    let difference = Math.round((now - cachedData) / 1000);
+    if (difference <= 120) {
+      let pendingItems = JSON.parse(localStorage.getItem("item-cache-data-pending"));
+      let doneItems = JSON.parse(localStorage.getItem("item-cache-data-done"));
+      setPendingItems(processItemValues(pendingItems));
+      setDoneItems(processItemValues(doneItems));
+    } else {
+      axios.get(
+        "http://127.0.0.1:8000/v1/item/get", 
+        {
+          headers: {"token": localStorage.getItem("user-token")}
+        }
+      ).then(response => {
+        let pending_items = response.data["pending_items"];
+        let done_items = response.data["done_items"];
+        localStorage.setItem("item-cache-date", new Date());
+        localStorage.setItem("item-cache-data-pending", JSON.stringify(pending_items));
+        localStorage.setItem("item-cache-data-done", JSON.stringify(done_items));
+        setPendingItems(processItemValues(pending_items));
+        setDoneItems(processItemValues(done_items));
+      }).catch(error => {
+        if (error.response.status === 401) logout();
+      });
+    }
   }
   const handleLogin = token => {
     localStorage.setItem("user-token", token);

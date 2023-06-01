@@ -13,6 +13,7 @@ pub async fn create(req: HttpRequest, db: DB, token: JwToken) -> HttpResponse {
   let title: String = req.match_info().get("title").unwrap().to_string();
   let items = to_do::table
       .filter(to_do::columns::title.eq(&title.as_str()))
+      .filter(to_do::columns::user_id.eq(&token.user_id))
       .order(to_do::columns::id.asc())
       .load::<Item>(&db.connection)
       .unwrap();

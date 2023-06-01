@@ -36,9 +36,12 @@ function App() {
     setLoginStatus(false);
   }
   function getItems() {
+    console.log(localStorage.getItem("user-token"))
     axios.get(
       "http://127.0.0.1:8000/v1/item/get", 
-      {headers: {"token": localStorage.getItem("user-token")}}
+      {
+        headers: {"token": localStorage.getItem("user-token")}
+      }
     ).then(response => {
       setPendingItems(processItemValues(response.data["pending_items"]));
       setDoneItems(processItemValues(response.data["done_items"]));

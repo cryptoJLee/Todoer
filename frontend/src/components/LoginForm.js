@@ -18,6 +18,7 @@ const LoginForm = ({handleLogin}) => {
       .then(response => {
         setUsername("");
         setPassword("");
+        console.log(JSON.stringify(response.data));
         handleLogin(response.data["token"]);
       })
       .catch(error => {

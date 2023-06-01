@@ -7,7 +7,7 @@ const CreateToDoItem = ({passBackResponse}) => {
   const createItem = () => {
     axios.post("http://127.0.0.1:8000/v1/item/create/" + title,
       {},
-      {headers: {"token": "some_token"}}
+      {headers: {"token": localStorage.getItem("user-token")}}
     ).then(response => {
       setTitle("");
       passBackResponse(response);

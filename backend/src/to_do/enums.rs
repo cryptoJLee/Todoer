@@ -1,6 +1,6 @@
 use std::fmt;
 use serde::ser::{Serialize, Serializer};
-#[derive(Clone)]
+#[derive(Clone, Eq, Debug)]
 pub enum TaskStatus {
   DONE,
   PENDING
@@ -36,6 +36,25 @@ impl fmt::Display for TaskStatus {
     match &self {
       &Self::DONE => {write!(f, "DONE")},
       &Self::PENDING => {write!(f, "PENDING")}
+    }
+  }
+}
+
+impl PartialEq for TaskStatus {
+  fn eq(&self, other: &Self) -> bool {
+    match self {
+      TaskStatus::DONE => {
+        match other {
+          &TaskStatus::DONE => return true,
+          &TaskStatus::PENDING => return false
+        }
+      },
+      TaskStatus::PENDING => {
+        match other {
+          &TaskStatus::DONE => return false,
+          &TaskStatus::PENDING => return true
+        }
+      }
     }
   }
 }
